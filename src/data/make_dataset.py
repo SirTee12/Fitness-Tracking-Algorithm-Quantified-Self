@@ -86,10 +86,60 @@ gyr_df.index = pd.to_datetime(gyr_df['time (01:00)'])
 # remove the epoch and time column
 acc_df.drop(['epoch (ms)', 'time (01:00)'], axis=1, inplace=True)
 gyr_df.drop(['epoch (ms)', 'time (01:00)'], axis=1, inplace=True)
+
+
 # --------------------------------------------------------------
 # Turn into function
 # --------------------------------------------------------------
 # lets turn everything into a function
+def read_data_from_files(files):
+    acc_df = pd.DataFrame()
+    gyr_df = pd.DataFrame()
+
+    # set the counter for the number of set
+    acc_set = 1
+    gyr_set = 1
+    # apply the for loop
+    for f in files:
+        participant = f.split('-')[0].replace(data_path, '')
+        label = f.split('-')[1]
+        category = f.split('-')[2].rstrip('123').rstrip('_MetaWear_2019')
+
+        # read the csv file of f
+        df = pd.read_csv(f)
+
+        # add the newly extracted features as columns
+        df['participant'] = participant
+        df['label'] = label
+        df['category'] = category
+
+        # append to the acc_df and gyr_df
+        if 'Accelerometer' in f:
+            df['set'] = acc_set
+            acc_set += 1
+            acc_df = pd.concat([acc_df, df])
+        if 'Gyroscope' in f:
+            df['set'] = gyr_set
+            gyr_set += 1
+            gyr_df = pd.concat([gyr_df, df])
+    # drop the NaN columns
+    acc_df.dropna(axis=1, inplace=True)
+    gyr_df.dropna(axis=1, inplace=True)
+
+    # convert the epoch feature to datetime and set as index
+    acc_df.index = pd.to_datetime(acc_df['epoch (ms)'], unit='ms')
+    gyr_df.index = pd.to_datetime(gyr_df['time (01:00)'])
+
+    # remove the epoch and time column
+    acc_df.drop(['epoch (ms)', 'time (01:00)'], axis=1, inplace=True)
+    gyr_df.drop(['epoch (ms)', 'time (01:00)'], axis=1, inplace=True)
+
+    return acc_df, gyr_df
+
+
+# Apply the function to extract the file data
+acc_df, gyr_df = read_data_from_files(files)
+
 
 # --------------------------------------------------------------
 # Merging datasets
