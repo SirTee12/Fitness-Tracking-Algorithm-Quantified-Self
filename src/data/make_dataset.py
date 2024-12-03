@@ -27,6 +27,38 @@ category = f.split('-')[2].rstrip('123')
 # --------------------------------------------------------------
 # Read all files
 # --------------------------------------------------------------
+# create empty dataframes
+acc_df = pd.DataFrame()
+gyr_df = pd.DataFrame()
+
+# set the counter for the number of set
+acc_set = 1
+gyr_set = 1
+# apply the for loop
+for f in files:
+    participant = f.split('-')[0].replace(data_path, '')
+    label = f.split('-')[1]
+    category = f.split('-')[2].rstrip('123').rstrip('_MetaWear_2019')
+
+    # read the csv file of f
+    df = pd.read_csv(f)
+
+    # add the newly extracted features as columns
+    df['participant'] = participant
+    df['label'] = label
+    df['category'] = category
+
+    # append to the acc_df and gyr_df
+    if 'Accelerometer' in f:
+        df['set'] = acc_set
+        acc_set += 1
+        acc_df = pd.concat([acc_df, df])
+    if 'Gyroscope' in f:
+        df['set'] = gyr_set
+        gyr_set += 1
+        gyr_df = pd.concat([gyr_df, df])
+
+    # print(category)
 
 
 # --------------------------------------------------------------
