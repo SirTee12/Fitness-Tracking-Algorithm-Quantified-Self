@@ -67,6 +67,17 @@ gyr_df.dropna(axis=1, inplace=True)
 # verify
 acc_df.head()
 
+# Lets look at the brief description of the data. We need to convert
+# `epoch (ms)` and `time (01:00)` too timestamp data type.
+# the epoch column is in unix scale. it shows the number of milliseconds
+# that have elapsed since `January 1, 1970 at 00:00 UTC.`
+acc_df.info()
+
+pd.to_datetime(df['epoch (ms)'], unit='ms')
+pd.to_datetime(df['time (01:00)'])
+
+# verify
+
 # --------------------------------------------------------------
 # Working with datetimes
 # --------------------------------------------------------------
