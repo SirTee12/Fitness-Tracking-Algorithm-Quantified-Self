@@ -73,20 +73,23 @@ acc_df.head()
 # that have elapsed since `January 1, 1970 at 00:00 UTC.`
 acc_df.info()
 
-pd.to_datetime(df['epoch (ms)'], unit='ms')
-pd.to_datetime(df['time (01:00)'])
 
 # verify
 
 # --------------------------------------------------------------
 # Working with datetimes
 # --------------------------------------------------------------
+# convert the epoch feature to datetime and set as index
+acc_df.index = pd.to_datetime(acc_df['epoch (ms)'], unit='ms')
+gyr_df.index = pd.to_datetime(gyr_df['time (01:00)'])
 
-
+# remove the epoch and time column
+acc_df.drop(['epoch (ms)', 'time (01:00)'], axis=1, inplace=True)
+gyr_df.drop(['epoch (ms)', 'time (01:00)'], axis=1, inplace=True)
 # --------------------------------------------------------------
 # Turn into function
 # --------------------------------------------------------------
-
+# lets turn everything into a function
 
 # --------------------------------------------------------------
 # Merging datasets
