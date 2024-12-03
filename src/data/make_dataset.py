@@ -144,7 +144,7 @@ acc_df, gyr_df = read_data_from_files(files)
 # --------------------------------------------------------------
 # Merging datasets
 # --------------------------------------------------------------
-
+data_merged = pd.merge(acc_df, gyr_df, how='outer')
 
 # --------------------------------------------------------------
 # Resample data (frequency conversion)
