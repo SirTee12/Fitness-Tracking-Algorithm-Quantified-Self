@@ -60,6 +60,12 @@ for f in files:
 
     # print(category)
 
+# remove the unnamed column from accelerometer and gyroscope dataframes
+acc_df.dropna(axis=1, inplace=True)
+gyr_df.dropna(axis=1, inplace=True)
+
+# verify
+acc_df.head()
 
 # --------------------------------------------------------------
 # Working with datetimes
