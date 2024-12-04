@@ -157,7 +157,10 @@ data_merged.columns = ['acc_x', 'acc_y', 'acc_z', 'gyr_x',
 # --------------------------------------------------------------
 # Resample data (frequency conversion)
 # --------------------------------------------------------------
+data_merged[:1000].resample(rule='s').mean()
 
+sampling = {'acc_x': 'mean', 'acc_y': 'mean', 'acc_z': 'mean', 'gyr_x': 'mean', 'gyr_y': 'mean',
+            'gyr_z': 'mean', 'participan': 'last', 'label': 'last', 'category': 'last', 'set': 'last'}
 # Accelerometer:    12.500HZ
 # Gyroscope:        25.000Hz
 
