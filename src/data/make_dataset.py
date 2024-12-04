@@ -131,8 +131,10 @@ def read_data_from_files(files):
     gyr_df.index = pd.to_datetime(gyr_df['time (01:00)'])
 
     # remove the epoch and time column
-    acc_df.drop(['epoch (ms)', 'time (01:00)'], axis=1, inplace=True)
-    gyr_df.drop(['epoch (ms)', 'time (01:00)'], axis=1, inplace=True)
+    acc_df.drop(['epoch (ms)', 'time (01:00)', 'elapsed (s)'],
+                axis=1, inplace=True)
+    gyr_df.drop(['epoch (ms)', 'time (01:00)', 'elapsed (s)'],
+                axis=1, inplace=True)
 
     return acc_df, gyr_df
 
@@ -144,7 +146,13 @@ acc_df, gyr_df = read_data_from_files(files)
 # --------------------------------------------------------------
 # Merging datasets
 # --------------------------------------------------------------
-data_merged = pd.merge(acc_df, gyr_df, how='outer')
+data_merged = pd.merge(
+    acc_df.iloc[:, :3], gyr_df, how='outer', left_index=True, right_index=True)
+
+# rename columns
+data_merged.columns = ['acc_x', 'acc_y', 'acc_z', 'gyr_x',
+                       'gyr_y', 'gyr_z', 'participant', 'label', 'category', 'set']
+
 
 # --------------------------------------------------------------
 # Resample data (frequency conversion)
